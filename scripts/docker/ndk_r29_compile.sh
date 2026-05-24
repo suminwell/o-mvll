@@ -18,6 +18,7 @@ tar xzvf spdlog-1.10.0-Linux.tar.gz
 
 export NDK_STAGE1=/usr/lib/llvm-21
 export NDK_STAGE2=/usr/lib/llvm-21
+export LD_LIBRARY_PATH=/llvm21-lib:${LD_LIBRARY_PATH:-}
 
 mkdir -p /test-deps/bin
 cp ${NDK_STAGE2}/bin/clang /test-deps/bin
