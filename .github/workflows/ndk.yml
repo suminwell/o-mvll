@@ -19,33 +19,23 @@ jobs:
           IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG"
           NEXT_VERSION="${MAJOR}-$((MINOR + 1))-0"
           echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Android NDK r29
-        uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r29
-          local-cache: false
-          link-to-sdk: true
-      - name: Build Android LLVM toolchain r29
+      - name: Install LLVM 21
         shell: bash
         run: |
-          export ANDROID_NDK_ROOT="$(ls -d /opt/hostedtoolcache/ndk/r29/* | head -n 1)"
-          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
-          test -x "$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/clang"
-          curl -LO https://storage.googleapis.com/git-repo-downloads/repo
-          chmod +x repo
-          sudo mv repo /usr/local/bin/repo
-          bash scripts/deps/ndk/compile_llvm_r29.sh
+          wget -qO- https://apt.llvm.org/llvm.sh | sudo bash -s -- 21
+          sudo apt-get update
+          sudo apt-get install -y clang-21 lld-21 llvm-21-dev libclang-21-dev
       - name: O-MVLL Android NDK r29
         shell: bash
         run: |
           curl -LO https://open-obfuscator.build38.io/static/omvll-deps-ndk-r26d.tar
           mkdir -p /tmp/third-party-ndk
           tar xvf ./omvll-deps-ndk-r26d.tar --directory=/tmp/third-party-ndk
-          cp omvll-deps/android-llvm-toolchain-r29.tar.gz /tmp/third-party-ndk/omvll-deps-ndk-r26d/
           curl -LO https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tgz
           tar xzvf Python-3.10.7.tgz --directory=${{ github.workspace }}/dist
           docker run --rm \
             -v /tmp/third-party-ndk:/third-party \
+            -v /usr/lib/llvm-21:/usr/lib/llvm-21:ro \
             -v ${{ github.workspace }}/dist/Python-3.10.7:/Python-3.10.7 \
             -v $GITHUB_WORKSPACE:/o-mvll \
             openobfuscator/omvll-build:latest bash /o-mvll/scripts/docker/ndk_r29_compile.sh

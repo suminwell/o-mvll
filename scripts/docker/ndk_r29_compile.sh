@@ -9,21 +9,15 @@ set -ex
 mkdir -p /data
 cd /data
 
-cp /third-party/omvll-deps-ndk-*/android-llvm-toolchain-r29.tar.gz .
 cp /third-party/omvll-deps-ndk-*/Python-slim.tar.gz .
 cp /third-party/omvll-deps-ndk-*/pybind11.tar.gz .
 cp /third-party/omvll-deps-ndk-*/spdlog-1.10.0-Linux.tar.gz .
-
-tar xzvf android-llvm-toolchain-r29.tar.gz
-tar xzvf android-llvm-toolchain-r29/out.tar.gz -C android-llvm-toolchain-r29
-tar xzvf android-llvm-toolchain-r29/out/stage1-install.tar.gz -C android-llvm-toolchain-r29/out
-tar xzvf android-llvm-toolchain-r29/out/stage2.tar.gz -C android-llvm-toolchain-r29/out
 tar xzvf Python-slim.tar.gz
 tar xzvf pybind11.tar.gz
 tar xzvf spdlog-1.10.0-Linux.tar.gz
 
-export NDK_STAGE1=$(pwd)/android-llvm-toolchain-r29/out/stage1-install
-export NDK_STAGE2=$(pwd)/android-llvm-toolchain-r29/out/stage2
+export NDK_STAGE1=/usr/lib/llvm-21
+export NDK_STAGE2=/usr/lib/llvm-21
 
 mkdir -p /test-deps/bin
 cp ${NDK_STAGE2}/bin/clang /test-deps/bin
