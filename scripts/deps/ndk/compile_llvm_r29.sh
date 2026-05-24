@@ -41,7 +41,7 @@ cd android-llvm-toolchain-r29-tmp
 repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
 cp "$manifest_path" .repo/manifests/
 repo init -m "$manifest"
-repo sync -c
+repo sync -c -j1 --fail-fast || repo sync -c -j1 --fail-fast
 
 python3 toolchain/llvm_android/build.py --skip-tests
 
