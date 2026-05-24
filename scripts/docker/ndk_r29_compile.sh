@@ -15,7 +15,7 @@ cd "$DATA_DIR"
 THIRD_PARTY_DIR=${THIRD_PARTY_DIR:-/third-party}
 O_MVLL_ROOT=${O_MVLL_ROOT:-/o-mvll}
 if [ ! -d "$O_MVLL_ROOT/src" ]; then
-  O_MVLL_ROOT=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+  O_MVLL_ROOT=${GITHUB_WORKSPACE:-$(pwd)}
 fi
 
 cp "$THIRD_PARTY_DIR"/omvll-deps-ndk-*/Python-slim.tar.gz .
