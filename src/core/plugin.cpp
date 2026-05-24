@@ -126,7 +126,7 @@ static bool findYamlConfig(std::string Dir) {
     if (loadYamlConfig(Dir, omvll::PyConfig::YamlFile))
       return true;
 
-    SmallString<256> Parent(StringRef(Dir));
+    SmallString<256> Parent{StringRef(Dir)};
     sys::path::remove_filename(Parent);
     std::string ParentDir = Parent.str().str();
     if (ParentDir.empty() || ParentDir == Dir)
