@@ -4,7 +4,10 @@
 //
 
 #include <dlfcn.h>
+#include <string>
 
+#include "llvm/ADT/StringRef.h"
+#include "llvm/TargetParser/Triple.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Support/FileSystem.h"
@@ -21,6 +24,11 @@
 #include "omvll/utils.hpp"
 
 using namespace llvm;
+
+namespace llvm {
+Triple::Triple(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> &&TripleStr)
+    : Triple(StringRef(TripleStr)) {}
+} // namespace llvm
 
 static llvm::once_flag InitializePluginFlag;
 
