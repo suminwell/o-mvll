@@ -1,5 +1,8 @@
 name: 'O-MVLL NDK'
-on: push
+
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
