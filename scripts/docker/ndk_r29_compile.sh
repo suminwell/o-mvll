@@ -47,7 +47,7 @@ cmake -GNinja .. \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_CXX_COMPILER=${NDK_STAGE1}/bin/clang++ \
       -DCMAKE_C_COMPILER=${NDK_STAGE1}/bin/clang \
-      -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+      -DCMAKE_CXX_FLAGS="" \
       -DPython3_ROOT_DIR=$DATA_DIR/Python-slim \
       -DPython3_LIBRARY=$DATA_DIR/Python-slim/lib/libpython3.10.a \
       -DPython3_INCLUDE_DIR=$DATA_DIR/Python-slim/include/python3.10 \
