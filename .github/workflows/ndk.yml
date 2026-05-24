@@ -25,6 +25,9 @@ jobs:
           wget -qO- https://apt.llvm.org/llvm.sh | sudo bash -s -- 21
           sudo apt-get update
           sudo apt-get install -y clang-21 lld-21 llvm-21-dev libclang-21-dev
+          mkdir -p llvm-21-runtime
+          cp -a /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1 llvm-21-runtime/
+          cp -a /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 llvm-21-runtime/
       - name: O-MVLL Android NDK r29
         shell: bash
         run: |
@@ -36,7 +39,7 @@ jobs:
           docker run --rm \
             -v /tmp/third-party-ndk:/third-party \
             -v /usr/lib/llvm-21:/usr/lib/llvm-21:ro \
-            -v /usr/lib/llvm-21/lib:/llvm21-lib:ro \
+            -v ${{ github.workspace }}/llvm-21-runtime:/llvm21-lib:ro \
             -v ${{ github.workspace }}/dist/Python-3.10.7:/Python-3.10.7 \
             -v $GITHUB_WORKSPACE:/o-mvll \
             openobfuscator/omvll-build:latest bash /o-mvll/scripts/docker/ndk_r29_compile.sh
