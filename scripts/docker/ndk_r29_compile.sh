@@ -65,5 +65,5 @@ ninja
 
 mkdir -p "$O_MVLL_ROOT/dist"
 cp "$O_MVLL_ROOT/src/o-mvll-build_ndk_r29/libOMVLL.so" "$O_MVLL_ROOT/dist/omvll-ndk-r29.so"
-cp "${NDK_STAGE1}/lib/x86_64-unknown-linux-gnu/libc++.so.1" "$O_MVLL_ROOT/dist/"
-cp "${NDK_STAGE1}/lib/x86_64-unknown-linux-gnu/libc++abi.so.1" "$O_MVLL_ROOT/dist/"
+cp "$(ldconfig -p | awk '/libc\+\+\.so\.1 / { print $NF; exit }')" "$O_MVLL_ROOT/dist/"
+cp "$(ldconfig -p | awk '/libc\+\+abi\.so\.1 / { print $NF; exit }')" "$O_MVLL_ROOT/dist/"
