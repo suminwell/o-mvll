@@ -678,7 +678,7 @@ bool StringEncoding::processGlobal(Use &Op, GlobalVariable &G,
                                         /* no var args */ false);
 
 #if LLVM_VERSION_MAJOR >= 21
-  unsigned GlobalIDHashVal = xxh3_64bits(GlobalValue::getGlobalIdentifier(G.getName(), GlobalValue::GlobalIdentifier::Linkage(G.getLinkage()), ""));
+  unsigned GlobalIDHashVal = xxh3_64bits((G.getName() + Twine(':') + Twine(static_cast<unsigned>(G.getLinkage()))).str());
 #elif LLVM_VERSION_MAJOR > 18
   unsigned GlobalIDHashVal = xxh3_64bits(G.getGlobalIdentifier());
 #else
