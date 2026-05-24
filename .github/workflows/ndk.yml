@@ -27,9 +27,9 @@ jobs:
           link-to-sdk: true
       - name: Build Android LLVM toolchain r29
         shell: bash
-        env:
-          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
+          export ANDROID_NDK_ROOT="${ANDROID_NDK_ROOT:-${ANDROID_NDK_HOME:-}}"
+          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
           curl -LO https://storage.googleapis.com/git-repo-downloads/repo
           chmod +x repo
           sudo mv repo /usr/local/bin/repo
