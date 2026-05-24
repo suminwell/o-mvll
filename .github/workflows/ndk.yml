@@ -52,6 +52,8 @@ jobs:
           cwd: ${{ github.workspace }}/dist/
           files: |
             ./omvll-ndk-r29.so
+            ./libc++.so.1
+            ./libc++abi.so.1
             ./sample-omvll-config.py
             ./Python-3.10.7
           outPath: ${{ github.workspace }}/dist/omvll_v${{ steps.versioning.outputs.next_version }}_linux.tar.gz
