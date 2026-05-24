@@ -210,11 +210,7 @@ else()
   )
 
   if(OMVLL_ABI STREQUAL "CustomAndroid")
-    target_link_libraries(OMVLL PRIVATE
-      -Wl,-Bstatic
-      stdc++
-      -Wl,-Bdynamic
-    )
+    target_link_libraries(OMVLL PRIVATE stdc++)
   endif()
 endif()
 
