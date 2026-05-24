@@ -48,11 +48,11 @@ cmake -GNinja .. \
       -DCMAKE_CXX_COMPILER=${NDK_STAGE1}/bin/clang++ \
       -DCMAKE_C_COMPILER=${NDK_STAGE1}/bin/clang \
       -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
-      -DPython3_ROOT_DIR=/data/Python-slim \
-      -DPython3_LIBRARY=/data/Python-slim/lib/libpython3.10.a \
-      -DPython3_INCLUDE_DIR=/data/Python-slim/include/python3.10 \
-      -Dpybind11_DIR=/data/pybind11/share/cmake/pybind11 \
-      -Dspdlog_DIR=/data/spdlog-1.10.0-Linux/lib/cmake/spdlog \
+      -DPython3_ROOT_DIR=$DATA_DIR/Python-slim \
+      -DPython3_LIBRARY=$DATA_DIR/Python-slim/lib/libpython3.10.a \
+      -DPython3_INCLUDE_DIR=$DATA_DIR/Python-slim/include/python3.10 \
+      -Dpybind11_DIR=$DATA_DIR/pybind11/share/cmake/pybind11 \
+      -Dspdlog_DIR=$DATA_DIR/spdlog-1.10.0-Linux/lib/cmake/spdlog \
       -DLLVM_DIR=${NDK_STAGE2}/lib/cmake/llvm \
       -DLLVM_TOOLS_DIR="$TEST_DEPS_DIR" \
       -DLLVM_REQUIRED_VERSION=21.1.8 \
