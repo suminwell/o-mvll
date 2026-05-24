@@ -156,6 +156,7 @@ if(NOT APPLE)
   target_link_libraries(OMVLL
     PRIVATE
     -static-libgcc
+    -static-libstdc++
   )
 endif()
 
