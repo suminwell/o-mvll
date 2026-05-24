@@ -170,13 +170,21 @@ PassPluginLibraryInfo getOMVLLPluginInfo() {
   return {LLVM_PLUGIN_API_VERSION, "OMVLL", "1.4.1", [](PassBuilder &PB) {
             try {
               PB.registerPipelineEarlySimplificationEPCallback(
-                  [](ModulePassManager &MPM, OptimizationLevel Opt) {
+                  [](ModulePassManager &MPM, OptimizationLevel Opt
+#if LLVM_VERSION_MAJOR >= 21
+                     , ThinOrFullLTOPhase Phase
+#endif
+                  ) {
                     MPM.addPass(omvll::LoggerBind());
                     addPassesForPhase(MPM, omvll::Phase::Early);
                     return true;
                   });
               PB.registerOptimizerLastEPCallback(
-                  [](ModulePassManager &MPM, OptimizationLevel Opt) {
+                  [](ModulePassManager &MPM, OptimizationLevel Opt
+#if LLVM_VERSION_MAJOR >= 21
+                     , ThinOrFullLTOPhase Phase
+#endif
+                  ) {
                     addPassesForPhase(MPM, omvll::Phase::Last);
                     return true;
                   });
