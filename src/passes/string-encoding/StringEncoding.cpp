@@ -677,7 +677,9 @@ bool StringEncoding::processGlobal(Use &Op, GlobalVariable &G,
   FunctionType *FTy = FunctionType::get(Type::getVoidTy(Ctx), /* no args */ {},
                                         /* no var args */ false);
 
-#if LLVM_VERSION_MAJOR > 18
+#if LLVM_VERSION_MAJOR >= 21
+  unsigned GlobalIDHashVal = xxh3_64bits(GlobalValue::getGlobalIdentifier(G.getName(), GlobalValue::GlobalIdentifier::Linkage(G.getLinkage()), ""));
+#elif LLVM_VERSION_MAJOR > 18
   unsigned GlobalIDHashVal = xxh3_64bits(G.getGlobalIdentifier());
 #else
   unsigned GlobalIDHashVal =
