@@ -14,9 +14,7 @@ llvm::PreservedAnalyses LoggerBind::run(llvm::Module &M,
                                         llvm::ModuleAnalysisManager &) {
   auto ModuleName =
       M.getModuleIdentifier().empty() ? "Module" : M.getModuleIdentifier();
-  auto TargetTriple = M.getTargetTriple().empty() ? "Unknown" : M.getTargetTriple();
-
-  Logger::BindModule(ModuleName, TargetTriple);
+  Logger::BindModule(ModuleName, "Unknown");
   return llvm::PreservedAnalyses::all();
 }
 
