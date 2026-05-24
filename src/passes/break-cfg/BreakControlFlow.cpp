@@ -83,7 +83,7 @@ bool BreakControlFlow::runOnFunction(Function &F) {
   if (F.isVarArg())
     return false;
 
-  const auto &TT = Triple(F.getParent()->getTargetTriple());
+  const auto &TT = Triple{StringRef(F.getParent()->getTargetTriple())};
   if (!(TT.isAArch64() || TT.isARM() || TT.isThumb()))
     return false;
 

@@ -665,7 +665,7 @@ bool StringEncoding::processGlobal(Use &Op, GlobalVariable &G,
   std::vector<char> Encoded(StrSz);
   EncodingInfo EI(EncodingTy::Global);
   EI.Key = Key;
-  genRoutines(Triple(M->getTargetTriple()), EI, Ctx);
+  genRoutines(Triple{StringRef(M->getTargetTriple())}, EI, Ctx);
 
   EI.EncodeFn(Encoded.data(), Str.data(), Key, StrSz);
 
@@ -753,7 +753,7 @@ bool StringEncoding::processLocal(Instruction &I, Use &Op, GlobalVariable &G,
   EncodingInfo EI(EncodingTy::Local);
   EI.Key = Key;
 
-  genRoutines(Triple(I.getModule()->getTargetTriple()), EI, Ctx);
+  genRoutines(Triple{StringRef(I.getModule()->getTargetTriple())}, EI, Ctx);
   EI.EncodeFn(Encoded.data(), Str.data(), Key, StrSz);
 
   Constant *StrEnc = ConstantDataArray::get(Ctx, Encoded);

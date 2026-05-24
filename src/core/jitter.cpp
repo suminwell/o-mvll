@@ -56,7 +56,7 @@ Jitter::Jitter(const std::string &Triple)
 
 void Jitter::initializeArchTarget() {
   if (!HasArchTargetInitialized) {
-    llvm::Triple TT(Triple);
+    llvm::Triple TT{StringRef(Triple)};
     if (TT.isARM() || TT.isThumb())
       initializeARMAssembler();
     else if (TT.isAArch64())
@@ -157,8 +157,7 @@ std::unique_ptr<MemoryBuffer> Jitter::jitAsm(const std::string &Asm,
   IRB.CreateRetVoid();
 
   orc::LLJITBuilder Builder;
-  std::string TT = Triple;
-  orc::JITTargetMachineBuilder JTMB{llvm::Triple(TT)};
+  orc::JITTargetMachineBuilder JTMB{llvm::Triple{StringRef(Triple)}};
   JTMB.setRelocationModel(Reloc::Model::PIC_);
   JTMB.setCodeModel(CodeModel::Large);
 #if LLVM_VERSION_MAJOR > 18

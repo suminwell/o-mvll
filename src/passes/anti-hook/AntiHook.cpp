@@ -45,7 +45,7 @@ bool AntiHook::runOnFunction(Function &F) {
   if (F.getInstructionCount() == 0)
     return false;
 
-  const auto &TT = Triple(F.getParent()->getTargetTriple());
+  const auto &TT = Triple{StringRef(F.getParent()->getTargetTriple())};
   if (!TT.isAArch64()) {
     SWARN("[{}] Only AArch64 target is supported. Skipping...", name());
     return false;
