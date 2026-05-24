@@ -36,6 +36,8 @@ jobs:
           docker run --rm \
             -v /tmp/third-party-ndk:/third-party \
             -v /usr/lib/llvm-21:/usr/lib/llvm-21:ro \
+            -v /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:ro \
+            -v /usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:ro \
             -v ${{ github.workspace }}/dist/Python-3.10.7:/Python-3.10.7 \
             -v $GITHUB_WORKSPACE:/o-mvll \
             openobfuscator/omvll-build:latest bash /o-mvll/scripts/docker/ndk_r29_compile.sh
