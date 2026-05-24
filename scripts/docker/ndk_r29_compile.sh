@@ -43,11 +43,14 @@ cd "$O_MVLL_ROOT/src"
 mkdir -p o-mvll-build_ndk_r29
 cd o-mvll-build_ndk_r29
 
+LIBSTDCXX_SO=$(${NDK_STAGE1}/bin/clang++ -print-file-name=libstdc++.so)
+
 cmake -GNinja .. \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_CXX_COMPILER=${NDK_STAGE1}/bin/clang++ \
       -DCMAKE_C_COMPILER=${NDK_STAGE1}/bin/clang \
       -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+      -DLIBSTDCXX_SO="$LIBSTDCXX_SO" \
       -DPython3_ROOT_DIR=$DATA_DIR/Python-slim \
       -DPython3_LIBRARY=$DATA_DIR/Python-slim/lib/libpython3.10.a \
       -DPython3_INCLUDE_DIR=$DATA_DIR/Python-slim/include/python3.10 \

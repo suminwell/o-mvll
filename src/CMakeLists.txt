@@ -212,7 +212,7 @@ else()
   if(OMVLL_ABI STREQUAL "CustomAndroid")
     target_link_libraries(OMVLL PRIVATE
       -Wl,--no-as-needed
-      stdc++
+      ${LIBSTDCXX_SO}
       -Wl,--as-needed
     )
   endif()
