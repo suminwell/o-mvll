@@ -41,7 +41,16 @@ cd android-llvm-toolchain-r29-tmp
 repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
 cp "$manifest_path" .repo/manifests/
 repo init -m "$manifest"
-repo sync -c -j1 --fail-fast || repo sync -c -j1 --fail-fast
+for attempt in 1 2 3 4 5; do
+    if repo sync -c -j1; then
+        break
+    fi
+    if [ "$attempt" = "5" ]; then
+        exit 1
+    fi
+    echo "repo sync failed, retrying ($attempt/5)"
+    sleep 10
+done
 
 python3 toolchain/llvm_android/build.py --skip-tests
 
