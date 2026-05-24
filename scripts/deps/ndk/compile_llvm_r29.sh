@@ -18,7 +18,13 @@ else
     ndk_platform="linux-x86_64"
 fi
 
-ndk_prebuilt_dir="$ANDROID_HOME/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/$ndk_platform"
+if [ -n "${ANDROID_NDK_ROOT:-}" ]; then
+    ndk_root="$ANDROID_NDK_ROOT"
+else
+    ndk_root="$ANDROID_HOME/ndk/$NDK_VERSION"
+fi
+
+ndk_prebuilt_dir="$ndk_root/toolchains/llvm/prebuilt/$ndk_platform"
 manifest_path=$(ls "$ndk_prebuilt_dir"/manifest_*.xml 2>/dev/null | head -n 1 || true)
 if [ -z "$manifest_path" ]; then
     echo "Unable to find NDK LLVM manifest in $ndk_prebuilt_dir"
