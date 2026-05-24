@@ -6,8 +6,11 @@
 
 set -ex
 
-mkdir -p /data
-cd /data
+DATA_DIR=${DATA_DIR:-/data}
+if ! mkdir -p "$DATA_DIR" 2>/dev/null; then
+  DATA_DIR=$(mktemp -d)
+fi
+cd "$DATA_DIR"
 
 THIRD_PARTY_DIR=${THIRD_PARTY_DIR:-/third-party}
 O_MVLL_ROOT=${O_MVLL_ROOT:-/o-mvll}
