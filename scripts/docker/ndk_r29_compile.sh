@@ -55,7 +55,7 @@ cmake -GNinja .. \
       -Dspdlog_DIR=/data/spdlog-1.10.0-Linux/lib/cmake/spdlog \
       -DLLVM_DIR=${NDK_STAGE2}/lib/cmake/llvm \
       -DLLVM_TOOLS_DIR="$TEST_DEPS_DIR" \
-      -DLLVM_REQUIRED_VERSION=21 \
+      -DLLVM_REQUIRED_VERSION=21.1.8 \
       -DOMVLL_ABI=CustomAndroid
 
 ninja
