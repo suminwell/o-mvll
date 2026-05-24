@@ -155,6 +155,7 @@ target_link_libraries(OMVLL
 set(LLVM_LIBS_DEP
   demangle
   OrcJIT
+  TargetParser
   native
 )
 
