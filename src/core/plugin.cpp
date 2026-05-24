@@ -121,16 +121,21 @@ static bool loadYamlConfig(StringRef Dir, StringRef FileName) {
 }
 
 static bool findYamlConfig(std::string Dir) {
-  while (true) {
+  while (!Dir.empty()) {
     SINFO("Looking for omvll.yml in {}", Dir);
     if (loadYamlConfig(Dir, omvll::PyConfig::YamlFile))
       return true;
-    if (sys::path::has_parent_path(Dir)) {
-      Dir = sys::path::parent_path(Dir);
-    } else {
+
+    SmallString<256> Parent = Dir;
+    sys::path::remove_filename(Parent);
+    std::string ParentDir = Parent.str().str();
+    if (ParentDir.empty() || ParentDir == Dir)
       return false;
-    }
+
+    Dir = ParentDir;
   }
+
+  return false;
 }
 
 void omvll::initYamlConfig() {
