@@ -4,6 +4,7 @@
 //
 
 #include <dlfcn.h>
+#include <new>
 #include <string>
 
 #include "llvm/ADT/StringRef.h"
@@ -26,8 +27,9 @@
 using namespace llvm;
 
 namespace llvm {
-Triple::Triple(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> &&TripleStr)
-    : Triple(StringRef(TripleStr)) {}
+Triple::Triple(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> &&TripleStr) {
+  new (this) Triple(TripleStr.c_str());
+}
 } // namespace llvm
 
 static llvm::once_flag InitializePluginFlag;
