@@ -42,7 +42,7 @@ repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchai
 cp "$manifest_path" .repo/manifests/
 repo init -m "$manifest"
 for attempt in 1 2 3 4 5; do
-    if repo sync -c -j1; then
+    if repo sync -c -j1 --force-sync --no-clone-bundle --no-tags; then
         break
     fi
     if [ "$attempt" = "5" ]; then
