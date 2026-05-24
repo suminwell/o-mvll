@@ -28,11 +28,15 @@ tar xzvf spdlog-1.10.0-Linux.tar.gz
 export NDK_STAGE1=/usr/lib/llvm-21
 export NDK_STAGE2=/usr/lib/llvm-21
 
-mkdir -p /test-deps/bin
-cp ${NDK_STAGE2}/bin/clang /test-deps/bin
-cp ${NDK_STAGE2}/bin/clang++ /test-deps/bin
+TEST_DEPS_DIR=${TEST_DEPS_DIR:-/test-deps}
+if ! mkdir -p "$TEST_DEPS_DIR/bin" 2>/dev/null; then
+  TEST_DEPS_DIR="$DATA_DIR/test-deps"
+  mkdir -p "$TEST_DEPS_DIR/bin"
+fi
+cp ${NDK_STAGE2}/bin/clang "$TEST_DEPS_DIR/bin"
+cp ${NDK_STAGE2}/bin/clang++ "$TEST_DEPS_DIR/bin"
 if [ -f ${NDK_STAGE2}/bin/llvm-lit ]; then
-  cp ${NDK_STAGE2}/bin/llvm-lit /test-deps/bin
+  cp ${NDK_STAGE2}/bin/llvm-lit "$TEST_DEPS_DIR/bin"
 fi
 
 cd "$O_MVLL_ROOT/src"
@@ -50,7 +54,7 @@ cmake -GNinja .. \
       -Dpybind11_DIR=/data/pybind11/share/cmake/pybind11 \
       -Dspdlog_DIR=/data/spdlog-1.10.0-Linux/lib/cmake/spdlog \
       -DLLVM_DIR=${NDK_STAGE2}/lib/cmake/llvm \
-      -DLLVM_TOOLS_DIR=/test-deps \
+      -DLLVM_TOOLS_DIR="$TEST_DEPS_DIR" \
       -DLLVM_REQUIRED_VERSION=21 \
       -DOMVLL_ABI=CustomAndroid
 
