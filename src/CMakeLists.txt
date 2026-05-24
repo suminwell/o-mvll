@@ -152,14 +152,6 @@ target_link_libraries(OMVLL
     ${Python3_LIBRARIES}
 )
 
-if(NOT APPLE)
-  target_link_libraries(OMVLL
-    PRIVATE
-    -static-libgcc
-    -static-libstdc++
-  )
-endif()
-
 set(LLVM_LIBS_DEP
   demangle
   OrcJIT
@@ -216,6 +208,14 @@ else()
   target_link_libraries(OMVLL PRIVATE
     ${llvm_libs}
   )
+
+  if(OMVLL_ABI STREQUAL "CustomAndroid")
+    target_link_libraries(OMVLL PRIVATE
+      -Wl,-Bstatic
+      stdc++
+      -Wl,-Bdynamic
+    )
+  endif()
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Release AND NOT OMVLL_FORCE_LOG_DEBUG)
