@@ -14,11 +14,18 @@ NDK_VERSION=29.0.13113456
 
 if [ "$host" = "Darwin" ]; then
     ndk_platform="darwin-x86_64"
-    manifest="manifest_13989888.xml"
 else
     ndk_platform="linux-x86_64"
-    manifest="manifest_13989888.xml"
 fi
+
+ndk_prebuilt_dir="$ANDROID_HOME/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/$ndk_platform"
+manifest_path=$(ls "$ndk_prebuilt_dir"/manifest_*.xml 2>/dev/null | head -n 1 || true)
+if [ -z "$manifest_path" ]; then
+    echo "Unable to find NDK LLVM manifest in $ndk_prebuilt_dir"
+    find "$ndk_prebuilt_dir" -maxdepth 1 -type f -print || true
+    exit 1
+fi
+manifest=$(basename "$manifest_path")
 
 mkdir -p omvll-deps
 rm -rf android-llvm-toolchain-r29-tmp android-llvm-toolchain-r29
@@ -26,7 +33,7 @@ mkdir android-llvm-toolchain-r29-tmp
 cd android-llvm-toolchain-r29-tmp
 
 repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
-cp "$ANDROID_HOME/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/$ndk_platform/$manifest" .repo/manifests/
+cp "$manifest_path" .repo/manifests/
 repo init -m "$manifest"
 repo sync -c
 
