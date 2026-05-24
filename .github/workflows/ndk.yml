@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,11 +17,17 @@ jobs:
       - name: Get deployment version
         id: versioning
         run: |
-          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
-          LATEST_TAG="${LATEST_TAG#v}"
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG"
-          NEXT_VERSION="${MAJOR}-$((MINOR + 1))-0"
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)
+          if [ -z "$LATEST_TAG" ]; then
+            NEXT_VERSION="0-1-0"
+          else
+            LATEST_TAG="${LATEST_TAG#v}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG"
+            NEXT_VERSION="${MAJOR}-$((MINOR + 1))-0"
+          fi
+          RELEASE_TAG="omvll-ndk-r29-v${NEXT_VERSION}"
           echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
       - name: Install LLVM 21
         shell: bash
         run: |
@@ -46,19 +55,15 @@ jobs:
             ./sample-omvll-config.py
             ./Python-3.10.7
           outPath: ${{ github.workspace }}/dist/omvll_v${{ steps.versioning.outputs.next_version }}_linux.tar.gz
-      - name: O-MVLL Deployment
+      - name: Publish GitHub release
         env:
-          BUILD38_S3_KEY: ${{ secrets.BUILD38_S3_KEY }}
-          BUILD38_S3_SECRET: ${{ secrets.BUILD38_S3_SECRET }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.versioning.outputs.release_tag }}
+          RELEASE_NAME: O-MVLL NDK r29 ${{ steps.versioning.outputs.next_version }}
+          RELEASE_ASSET: ${{ github.workspace }}/dist/omvll_v${{ steps.versioning.outputs.next_version }}_linux.tar.gz
         shell: bash
         run: |
-          docker run \
-            -v $GITHUB_WORKSPACE:/o-mvll \
-            -e GITHUB_ACTIONS="true" \
-            -e GITHUB_WORKSPACE=$GITHUB_WORKSPACE \
-            -e GITHUB_REF=$GITHUB_REF \
-            -e GITHUB_REPOSITORY=$GITHUB_REPOSITORY \
-            -e BUILD38_S3_KEY=$BUILD38_S3_KEY \
-            -e BUILD38_S3_SECRET=$BUILD38_S3_SECRET \
-            --rm \
-            openobfuscator/deployment python3 /o-mvll/.github/scripts/s3-deploy.py
+          gh release delete "$RELEASE_TAG" --yes --cleanup-tag || true
+          gh release create "$RELEASE_TAG" "$RELEASE_ASSET" \
+            --title "$RELEASE_NAME" \
+            --notes "O-MVLL plugin built for LLVM 21 / Android NDK r29."
