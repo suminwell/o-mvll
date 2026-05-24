@@ -41,7 +41,6 @@ cd android-llvm-toolchain-r29-tmp
 repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain --no-clone-bundle
 cp "$manifest_path" .repo/manifests/
 repo init -m "$manifest" --no-clone-bundle
-repo manifest -r | head -n 80
 for attempt in 1 2 3 4 5; do
     if repo sync -c -j1 --force-sync --no-clone-bundle --no-tags --no-use-superproject --no-partial-clone; then
         break
