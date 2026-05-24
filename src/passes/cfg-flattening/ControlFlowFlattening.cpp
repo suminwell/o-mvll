@@ -302,8 +302,8 @@ bool ControlFlowFlattening::runOnFunction(Function &F) {
   EntryIR.CreateBr(FlatLoopEntry);
   FlatLoopEndIR.CreateBr(FlatLoopEntry);
 
-  EmitDefaultCaseAssembly(DefaultCaseIR,
-                          Triple{StringRef(F.getParent()->getTargetTriple())});
+  std::string TargetTriple = F.getParent()->getTargetTriple().str();
+  EmitDefaultCaseAssembly(DefaultCaseIR, Triple{StringRef(TargetTriple)});
   DefaultCaseIR.CreateBr(FlatLoopEnd);
 
   SwitchInst *Switch = FlatLoopEntryIR.CreateSwitch(LoadSwitchVar, DefaultCase);

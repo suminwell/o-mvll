@@ -64,7 +64,8 @@ bool IndirectBranch::process(Function &F, const DataLayout &DL,
 
   JumpTable->setAlignment(Align(8));
   JumpTable->setUnnamedAddr(GlobalValue::UnnamedAddr::None);
-  if (Triple{StringRef(M.getTargetTriple())}.isiOS())
+  std::string TargetTriple = M.getTargetTriple().str();
+  if (Triple{StringRef(TargetTriple)}.isiOS())
     JumpTable->setSection("__DATA,__const");
 
   DenseMap<BasicBlock *, unsigned> BlockToIdx;
